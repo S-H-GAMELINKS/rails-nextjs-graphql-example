@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST: "db"
+
+  api:
+    build: ./graphql-api
+    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    volumes:
+      - ./graphql-api:/graphql-api
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+
+  client:
+    build: ./graphql-client
+    command: yarn dev
+    volumes:
+      - ./graphql-client:/graphql-client
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
