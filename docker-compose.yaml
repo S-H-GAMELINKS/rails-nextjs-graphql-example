@@ -28,7 +28,6 @@ services:
       - ./graphql-client:/graphql-client
     environment:
       CHOKIDAR_USEPOLLING: 'true'
-      NEXT_GRAPHQL_ENDPOINT: http:localhost:4000/graphql
     ports:
       - 3000:3000
     depends_on:
