@@ -12,7 +12,9 @@ services:
 
   api:
     build: ./graphql-api
-    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    command: |
+      sudo rm tmp/pids/server.pid
+      bundle exec rails s -p 4000 -b '0.0.0.0'
     volumes:
       - ./graphql-api:/graphql-api
     ports:
