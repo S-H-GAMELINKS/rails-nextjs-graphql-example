@@ -3,7 +3,22 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+import { useQuery } from '@apollo/client';
+import { POST_QUERY } from '../graphql/query/post';
+import { Post } from '../graphql/types/post';
+
+
 const Home: NextPage = () => {
+  const { loading, error, data } = useQuery<Post>(POST_QUERY, { variables: { postId: 1 } });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {JSON.stringify(error)}</p>;
+
+  if (!data) return null;
+  console.log(data);
+
+  const { post } = data;
+
   return (
     <div className={styles.container}>
       <Head>
@@ -16,6 +31,14 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <p>
+          {post.title}
+          {post.id}
+          {post.body}
+          {post.createdAt}
+          {post.updatedAt}
+        </p>
 
         <p className={styles.description}>
           Get started by editing{' '}
