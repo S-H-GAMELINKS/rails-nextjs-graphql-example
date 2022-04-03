@@ -5,3 +5,12 @@ export interface Post {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface CreatedPost {
+    post: Post;
+}
+
+export interface CreatePostInput {
+    title?: string;
+    body?: string;
+}

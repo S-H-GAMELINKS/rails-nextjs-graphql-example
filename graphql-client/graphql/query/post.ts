@@ -11,3 +11,17 @@ query($postId: ID!) {
     }
   }
 `
+
+export const CREATE_POST_QUERY = gql`
+mutation($input: CreatePostInput!) {
+  createPost(input: $input) {
+    post {
+      id
+      title
+      body
+      createdAt
+      updatedAt
+    }
+  }
+}
+`
