@@ -11,8 +11,13 @@ import { Post, CreatedPost, CreatePostInput } from '../graphql/types/post';
 
 
 const Home: NextPage = () => {
-  const { loading, error, data } = useQuery<Post>(POSTS_QUERY);
-  const [createPost, createPostMutationResult] = useMutation<CreatedPost, CreatePostInput>(CREATE_POST_QUERY);
+  const { loading, error, data, refetch } = useQuery<Post>(POSTS_QUERY);
+  const [createPost, createPostMutationResult] = useMutation<CreatedPost, CreatePostInput>(CREATE_POST_QUERY, {
+    onCompleted: () => {
+      console.log('Refech');
+      refetch();
+    },
+  });
 
   const [createPostParam, setCreatePostParam] = useState<CreatePostInput>();
 
@@ -31,10 +36,11 @@ const Home: NextPage = () => {
     })
   }
 
-  console.log(posts);
-
   const submitCreatePost = async () => {
-    if (!createPostParam?.title || !createPostParam.body) return;
+    console.log('Submit!');
+    console.log(createPostParam?.title);
+    console.log(createPostParam?.body);
+    if (!createPostParam?.title || !createPostParam?.body) return;
     await createPost({
       variables: {
         input: {
@@ -43,6 +49,8 @@ const Home: NextPage = () => {
         }
       }
     })
+
+    console.log(42);
 
     const error = createPostMutationResult.error;
     console.log(error);
@@ -55,7 +63,7 @@ const Home: NextPage = () => {
           <input name="title" onChange={handleCreatePostChange} />
         </div>
         <div className="form-field">
-          <input name="title" onChange={handleCreatePostChange} />
+          <input name="body" onChange={handleCreatePostChange} />
         </div>
         <div onClick={submitCreatePost}>CreatePost</div>
       </div>
